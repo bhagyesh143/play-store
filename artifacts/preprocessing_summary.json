@@ -1,0 +1,27 @@
+[
+    {
+        "dataset":"Google Play Store",
+        "original_rows":8893,
+        "training_rows":7114,
+        "testing_rows":1779,
+        "numeric_features":[
+            "Reviews",
+            "Size",
+            "Installs",
+            "Price"
+        ],
+        "categorical_features":[
+            "Category",
+            "Type",
+            "Content Rating",
+            "Genres",
+            "Last Updated",
+            "Current Ver",
+            "Android Ver"
+        ],
+        "random_state":42,
+        "test_size":0.2,
+        "target":"churn",
+        "target_definition":"1 if Rating < 4.0, otherwise 0"
+    }
+]

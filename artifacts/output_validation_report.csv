@@ -1,0 +1,2 @@
+X_train_rows,X_train_columns,X_test_rows,X_test_columns,y_train_rows,y_test_rows,nan_values,preprocessor_available,validation_status
+7114,3667,1779,3667,7114,1779,False,True,PASSED

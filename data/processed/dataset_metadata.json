@@ -1,0 +1,26 @@
+{
+    "dataset_name": "Google Play Store",
+    "problem_type": "Supervised Machine Learning",
+    "task": "Regression",
+    "target_variable": "Rating",
+    "rows": 8892,
+    "columns": 15,
+    "features": [
+        "App",
+        "Category",
+        "Reviews",
+        "Size",
+        "Installs",
+        "Type",
+        "Price",
+        "Content Rating",
+        "Genres",
+        "Current Ver",
+        "Android Ver",
+        "Updated_Year",
+        "Updated_Month",
+        "Updated_Day"
+    ],
+    "rating_minimum": 1.0,
+    "rating_maximum": 5.0
+}

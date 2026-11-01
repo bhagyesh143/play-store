@@ -1,0 +1,2 @@
+dataset,rows,columns,duplicate_rows,invalid_rating_values,required_columns_present
+Google Play Store,10841,13,483,1,True

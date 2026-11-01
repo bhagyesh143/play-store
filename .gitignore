@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Environment Variables & Secrets
+.env
+*.env
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Testing & Coverage
+.pytest_cache/
+
+# Logs & Inference Audits
+logs/*.log
+logs/inference/*.jsonl
+*.log
+
+# Generated Reports
+reports/*.csv
+
+# MLflow Tracking DB & Runs
+mlflow.db
+mlruns/
+
+# Keep directory structure tracked
+!logs/.gitkeep
+!logs/inference/.gitkeep
+!reports/.gitkeep
