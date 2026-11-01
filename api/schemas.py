@@ -48,20 +48,10 @@ class AppInput(BaseModel):
         default="Art & Design",
         description="Primary and secondary genres (e.g. 'Art & Design', 'Action', 'Puzzle')"
     )
-    Last_Updated: Optional[str] = Field(
-        default="January 7, 2018",
-        alias="Last Updated",
-        description="Date of the last update (e.g. 'January 7, 2018' or '2018-01-07')"
-    )
-    Current_Ver: Optional[Union[float, str]] = Field(
-        default="1.0.0",
-        alias="Current Ver",
-        description="Current application release version (e.g. '1.0.0')"
-    )
-    Android_Ver: Optional[Union[float, str]] = Field(
-        default="4.0.3 and up",
+    Android_Ver: str = Field(
+        default="4.1 and up",
         alias="Android Ver",
-        description="Minimum supported Android OS version (e.g. '4.0.3 and up')"
+        description="Minimum supported Android OS version (e.g. '4.1 and up')"
     )
 
     class Config:
@@ -77,9 +67,7 @@ class AppInput(BaseModel):
                 "Price": "0",
                 "Content Rating": "Everyone",
                 "Genres": "Art & Design",
-                "Last Updated": "January 7, 2018",
-                "Current Ver": "1.0.0",
-                "Android Ver": "4.0.3 and up"
+                "Android Ver": "4.1 and up"
             }
         }
 
