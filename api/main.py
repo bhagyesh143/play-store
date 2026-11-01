@@ -1,12 +1,11 @@
 """
 FastAPI Prediction Service for Google Play Store App Rating Prediction
-Provides real-time REST endpoints for rating predictions, health checks, and metadata.
+Streamlined strictly for real-time rating prediction with inference logging.
 """
 
 import time
 import uuid
 from datetime import datetime
-from typing import Dict, Any
 
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.responses import JSONResponse, HTMLResponse
@@ -15,26 +14,22 @@ from fastapi.exceptions import RequestValidationError
 
 from api.schemas import (
     AppInput,
-    PredictionResponse,
-    BatchAppInput,
-    BatchPredictionResponse,
-    HealthResponse,
-    ModelInfoResponse
+    PredictionResponse
 )
 from api.preprocessing import transform_input_to_features
 from api.model_loader import model_service
 from api.monitoring_logger import inference_logger
 
-# Initialize FastAPI application
+# Initialize streamlined FastAPI application
 app = FastAPI(
     title="Google Play Store App Rating Prediction API",
-    description="Production-ready MLOps API for predicting Google Play Store application ratings with real-time inference logging and drift monitoring.",
+    description="Streamlined MLOps Prediction Service for Google Play Store App Ratings.",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url=None
 )
 
-# Enable CORS for web clients and dashboards
+# Enable CORS for web browsers
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -46,47 +41,21 @@ app.add_middleware(
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """
-    Returns beginner-friendly, structured error messages for validation failures.
-    """
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "status": "ERROR",
-            "message": "Input validation error: Please verify your JSON field formats.",
+            "message": "Validation error: Check your input values.",
             "details": exc.errors()
         }
     )
 
 
-@app.get("/", tags=["General"])
-async def root():
-    """
-    Root status endpoint displaying API information and available navigation links.
-    """
-    return {
-        "service": "Google Play Store App Rating Prediction API",
-        "status": "online",
-        "version": "1.0.0",
-        "model_loaded": model_service.model is not None,
-        "docs_url": "/docs",
-        "web_app_ui": "/ui",
-        "endpoints": {
-            "web_ui": "GET /ui",
-            "health_check": "GET /health",
-            "model_info": "GET /model-info",
-            "predict_single": "POST /predict",
-            "predict_batch": "POST /predict/batch"
-        }
-    }
-
-
-@app.get("/ui", response_class=HTMLResponse, tags=["Web App"])
-@app.get("/app", response_class=HTMLResponse, tags=["Web App"])
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+@app.get("/ui", response_class=HTMLResponse, include_in_schema=False)
 async def web_app_ui():
     """
-    Interactive Web Application Graphical User Interface (GUI)
-    Allows users to input application features through form fields and view predicted ratings.
+    Visual Web App GUI - Accessible directly at the root URL (http://localhost:8001/)
     """
     return """
     <!DOCTYPE html>
@@ -99,19 +68,18 @@ async def web_app_ui():
         <style>
             * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
             body { background: #0f172a; color: #f8fafc; min-height: 100vh; padding: 40px 20px; }
-            .container { max-width: 900px; margin: 0 auto; }
-            .header { text-align: center; margin-bottom: 30px; }
+            .container { max-width: 800px; margin: 0 auto; }
+            .header { text-align: center; margin-bottom: 25px; }
             .header h1 { font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-            .header p { color: #94a3b8; font-size: 0.95rem; margin-top: 8px; }
+            .header p { color: #94a3b8; font-size: 0.95rem; margin-top: 6px; }
             .card { background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
             .form-group { display: flex; flex-direction: column; gap: 6px; }
             label { font-size: 0.85rem; font-weight: 600; color: #cbd5e1; }
             input, select { background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; padding: 10px 14px; font-size: 0.9rem; transition: border-color 0.2s; }
-            input:focus, select:focus { outline: none; border-color: #38bdf8; ring: 2px #38bdf8; }
+            input:focus, select:focus { outline: none; border-color: #38bdf8; }
             .btn-predict { grid-column: 1 / -1; margin-top: 15px; background: linear-gradient(135deg, #0284c7, #6366f1); color: #fff; border: none; padding: 14px; font-size: 1.05rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
             .btn-predict:hover { opacity: 0.95; transform: translateY(-1px); }
-            .btn-predict:active { transform: translateY(0); }
             .result-card { margin-top: 25px; padding: 25px; border-radius: 14px; background: #0f172a; border: 1px solid #38bdf8; display: none; }
             .result-header { display: flex; justify-content: space-between; align-items: center; }
             .rating-badge { font-size: 2.8rem; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
@@ -128,7 +96,7 @@ async def web_app_ui():
         <div class="container">
             <div class="header">
                 <h1>Google Play Store Rating Predictor</h1>
-                <p>Production MLOps Regression Service with Real-Time Inference & Drift Logging</p>
+                <p>Machine Learning Operations (MLOps) Prediction Service</p>
             </div>
 
             <div class="card">
@@ -215,7 +183,7 @@ async def web_app_ui():
                     <button type="submit" class="btn-predict">Predict Application Rating</button>
                 </form>
 
-                <div class="spinner" id="spinner">Calculating prediction using Random Forest Regressor...</div>
+                <div class="spinner" id="spinner">Predicting rating using Random Forest model...</div>
 
                 <div class="result-card" id="resultCard">
                     <div class="result-header">
@@ -224,7 +192,7 @@ async def web_app_ui():
                             <div class="rating-badge" id="predictedRating">-- <span style="font-size: 1.8rem;">★</span></div>
                         </div>
                         <div style="text-align: right;">
-                            <span class="tag" style="background: #065f46; color: #34d399; font-weight: 600;" id="statusBadge">SUCCESS</span>
+                            <span class="tag" style="background: #065f46; color: #34d399; font-weight: 600;">SUCCESS</span>
                         </div>
                     </div>
                     <div class="meta-tags">
@@ -236,9 +204,7 @@ async def web_app_ui():
             </div>
 
             <div class="links">
-                <a href="/docs" target="_blank">Swagger Documentation (/docs)</a> &bull;
-                <a href="/health" target="_blank">Health Check (/health)</a> &bull;
-                <a href="/model-info" target="_blank">Model Info (/model-info)</a>
+                <a href="/docs" target="_blank">Swagger Documentation (/docs)</a>
             </div>
         </div>
 
@@ -281,11 +247,11 @@ async def web_app_ui():
                         document.getElementById('requestTag').textContent = 'Request ID: ' + data.request_id.substring(0, 8) + '...';
                         resultCard.style.display = 'block';
                     } else {
-                        alert('Prediction Error: ' + (data.message || JSON.stringify(data.details)));
+                        alert('Error: ' + (data.message || JSON.stringify(data.details)));
                     }
                 } catch (err) {
                     spinner.style.display = 'none';
-                    alert('Network error connecting to API: ' + err.message);
+                    alert('Connection error: ' + err.message);
                 }
             });
         </script>
@@ -294,39 +260,10 @@ async def web_app_ui():
     """
 
 
-@app.get("/health", response_model=HealthResponse, tags=["Monitoring"])
-async def health_check():
-    """
-    Liveness and readiness health check for container orchestration and uptime monitoring.
-    """
-    return HealthResponse(
-        status="healthy" if model_service.model is not None else "degraded",
-        model_loaded=model_service.model is not None,
-        version="1.0.0",
-        timestamp=datetime.utcnow().isoformat() + "Z"
-    )
-
-
-@app.get("/model-info", response_model=ModelInfoResponse, tags=["Model"])
-async def get_model_info():
-    """
-    Returns registered model metadata, pipeline architecture, and evaluation metrics.
-    """
-    try:
-        info = model_service.get_info()
-        return ModelInfoResponse(**info)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to fetch model information: {str(e)}"
-        )
-
-
 @app.post("/predict", response_model=PredictionResponse, tags=["Inference"])
 async def predict_rating(app_input: AppInput, request: Request):
     """
-    Predicts the Google Play Store rating for a single mobile application.
-    Logs inference features, latency, and predictions for data drift monitoring.
+    Predict the Google Play Store rating for an application.
     """
     start_time = time.perf_counter()
     request_id = str(uuid.uuid4())
@@ -334,16 +271,16 @@ async def predict_rating(app_input: AppInput, request: Request):
     input_dict = app_input.model_dump(by_alias=True)
 
     try:
-        # Preprocess input into feature DataFrame
+        # Preprocess features into DataFrame
         df_features = transform_input_to_features(input_dict)
 
-        # Generate model prediction
+        # Generate prediction
         predicted_rating = model_service.predict_dataframe(df_features)
 
-        # Calculate latency
+        # Latency
         latency_ms = (time.perf_counter() - start_time) * 1000.0
 
-        # Log prediction to JSONL inference log for drift monitoring
+        # Log to inference log for data drift monitoring
         inference_logger.log_prediction(
             request_id=request_id,
             input_features=input_dict,
@@ -368,7 +305,6 @@ async def predict_rating(app_input: AppInput, request: Request):
 
     except Exception as e:
         latency_ms = (time.perf_counter() - start_time) * 1000.0
-        # Log failure event
         inference_logger.log_prediction(
             request_id=request_id,
             input_features=input_dict,
@@ -383,72 +319,3 @@ async def predict_rating(app_input: AppInput, request: Request):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Prediction error: {str(e)}"
         )
-
-
-@app.post("/predict/batch", response_model=BatchPredictionResponse, tags=["Inference"])
-async def predict_batch(batch_input: BatchAppInput, request: Request):
-    """
-    Generates rating predictions for multiple applications in a single batch request.
-    """
-    start_time = time.perf_counter()
-    batch_request_id = str(uuid.uuid4())
-    client_ip = request.client.host if request.client else "unknown"
-    predictions = []
-
-    for item in batch_input.applications:
-        item_start = time.perf_counter()
-        req_id = str(uuid.uuid4())
-        item_dict = item.model_dump(by_alias=True)
-
-        try:
-            df_feat = transform_input_to_features(item_dict)
-            rating = model_service.predict_dataframe(df_feat)
-            item_latency = (time.perf_counter() - item_start) * 1000.0
-
-            inference_logger.log_prediction(
-                request_id=req_id,
-                input_features=item_dict,
-                predicted_rating=rating,
-                prediction_latency_ms=item_latency,
-                model_name=model_service.model_name,
-                model_version=model_service.model_version,
-                status="SUCCESS",
-                client_ip=client_ip
-            )
-
-            predictions.append(
-                PredictionResponse(
-                    request_id=req_id,
-                    app_name=str(item_dict.get("App", "Unknown App")),
-                    predicted_rating=round(rating, 2),
-                    prediction_latency_ms=round(item_latency, 2),
-                    model_name=model_service.model_name,
-                    model_version=model_service.model_version,
-                    timestamp=datetime.utcnow().isoformat() + "Z",
-                    status="SUCCESS"
-                )
-            )
-        except Exception as e:
-            item_latency = (time.perf_counter() - item_start) * 1000.0
-            predictions.append(
-                PredictionResponse(
-                    request_id=req_id,
-                    app_name=str(item_dict.get("App", "Unknown App")),
-                    predicted_rating=0.0,
-                    prediction_latency_ms=round(item_latency, 2),
-                    model_name=model_service.model_name,
-                    model_version=model_service.model_version,
-                    timestamp=datetime.utcnow().isoformat() + "Z",
-                    status=f"FAILED: {str(e)}"
-                )
-            )
-
-    total_latency = (time.perf_counter() - start_time) * 1000.0
-
-    return BatchPredictionResponse(
-        request_id=batch_request_id,
-        total_applications=len(predictions),
-        predictions=predictions,
-        total_latency_ms=round(total_latency, 2),
-        status="SUCCESS"
-    )

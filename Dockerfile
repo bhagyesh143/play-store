@@ -9,11 +9,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies if required
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install Python API dependencies
 COPY requirements-api.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
@@ -30,10 +25,6 @@ RUN mkdir -p logs/inference
 
 # Expose API port
 EXPOSE 8000
-
-# Health check to monitor container health
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
 
 # Launch FastAPI prediction service
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

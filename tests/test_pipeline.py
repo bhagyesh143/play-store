@@ -126,28 +126,14 @@ def test_model_loading_and_prediction():
 # 3. TEST FASTAPI ENDPOINTS
 # ============================================================
 
-def test_root_endpoint(client):
+def test_web_ui_endpoint(client):
     response = client.get("/")
     assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "online"
-    assert data["model_loaded"] is True
+    assert "Google Play Store Rating Predictor" in response.text
 
-
-def test_health_endpoint(client):
-    response = client.get("/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "healthy"
-    assert data["model_loaded"] is True
-
-
-def test_model_info_endpoint(client):
-    response = client.get("/model-info")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["target_variable"] == "Rating"
-    assert "baseline_metrics" in data
+    ui_response = client.get("/ui")
+    assert ui_response.status_code == 200
+    assert "Predict Application Rating" in ui_response.text
 
 
 def test_predict_endpoint_valid(client):
