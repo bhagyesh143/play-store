@@ -39,6 +39,9 @@ reports/*.csv
 mlflow.db
 mlruns/
 
+# Deployment backups
+deployment_backup_*/
+
 # Keep directory structure tracked
 !logs/.gitkeep
 !logs/inference/.gitkeep

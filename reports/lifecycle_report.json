@@ -2,10 +2,10 @@
     "stage": "Automated Model Lifecycle Manager",
     "model_name": "Google_Play_Store_Production_Model",
     "decision_metric": "recall",
-    "candidate_version": 5,
+    "candidate_version": 6,
     "candidate_score": 0.830379746835443,
-    "production_version_before": 4,
-    "production_score_before": 0.0,
-    "promoted": true,
+    "production_version_before": 5,
+    "production_score_before": 0.830379746835443,
+    "promoted": false,
     "production_version_after": 5
 }
