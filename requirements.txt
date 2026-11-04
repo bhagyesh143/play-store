@@ -106,7 +106,9 @@ opentelemetry-semantic-conventions==0.65b0
 overrides==7.7.0
 packaging==26.3
 pandas==2.3.3
-pandera==0.32.1
+pandera>=0.35.0
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
 pandocfilters==1.5.1
 parso==0.8.7
 pillow==12.3.0
