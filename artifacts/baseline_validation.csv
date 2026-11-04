@@ -1,0 +1,2 @@
+validation_status,total_records,columns_checked,invalid_rating_count,missing_ratings
+PASSED,10891,13,1,1474

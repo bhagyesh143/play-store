@@ -1,0 +1,18 @@
+{
+    "status": "success",
+    "model_name": "Google_Play_Store_Production_Model",
+    "model_version": "5",
+    "run_id": "669de96e2903412d99e98a2cc1b341cd",
+    "docker_image": "play-store-api:model-v5",
+    "docker_available": false,
+    "image_built": false,
+    "kubernetes_deployment": "play-store-api",
+    "kubernetes_container": "play-store-api",
+    "kubernetes_service": "play-store-api-service",
+    "kubernetes_updated": false,
+    "deployment_bundle": {
+        "model": "deployment/model.pkl",
+        "preprocessor": "deployment/preprocessor.pkl",
+        "metadata": "deployment/model_metadata.json"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "dataset_name": "Google Play Store Apps",
+    "base_file": "data/raw/googleplaystore.csv",
+    "created_at": "2026-11-04T09:33:17.111931+00:00",
+    "versions": [
+        {
+            "version": 1,
+            "filename": "googleplaystore_v01.csv",
+            "hash": "3e438f48161961933d26e99a8d9fc8ed79edfaa9fb34f8838e1ab4ec7a9fab91",
+            "rows": 10841,
+            "columns": 13,
+            "timestamp": "2026-11-04T09:33:17.111943+00:00",
+            "source": "initial_baseline"
+        },
+        {
+            "version": 2,
+            "filename": "googleplaystore_v02.csv",
+            "hash": "e37f6483f23f3858362560c9bb574c63c5dee92238cbefa0fb1f2425c8c7a9dd",
+            "rows": 10891,
+            "new_rows_added": 50,
+            "timestamp": "2026-11-04T09:33:17.178166+00:00",
+            "source": "new_googleplaystore.csv"
+        }
+    ],
+    "ingested_hashes": [
+        "3e438f48161961933d26e99a8d9fc8ed79edfaa9fb34f8838e1ab4ec7a9fab91",
+        "e37f6483f23f3858362560c9bb574c63c5dee92238cbefa0fb1f2425c8c7a9dd"
+    ]
+}

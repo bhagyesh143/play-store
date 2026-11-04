@@ -1,0 +1,8 @@
+feature,type,metric,score,p_value,threshold,status
+Reviews,numerical,KS,0.036333,0.188398,0.1,OK
+Size,numerical,KS,0.228619,0.0,0.1,DRIFT
+Installs,numerical,KS,0.144215,0.0,0.1,DRIFT
+Price,numerical,KS,0.006708,1.0,0.1,OK
+Category,categorical,JS,0.358895,,0.1,DRIFT
+Type,categorical,JS,0.0,,0.1,OK
+Content Rating,categorical,JS,0.0,,0.1,OK

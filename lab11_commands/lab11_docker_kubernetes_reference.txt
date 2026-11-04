@@ -1,0 +1,54 @@
+============================================================
+LAB 11 — DOCKER + KUBERNETES REFERENCE GUIDE
+Project: Google Play Store Rating Prediction MLOps
+============================================================
+
+1. DOCKER COMMANDS
+------------------------------------------------------------
+# Build Docker image
+docker build -t play-store-api:latest -t play-store-api:v1 .
+
+# Run Docker container
+docker run -d --name play-store-api-container -p 8000:8000 play-store-api:latest
+
+# Check running containers
+docker ps
+
+# Inspect container logs
+docker logs play-store-api-container -f
+
+# Test container healthcheck
+docker inspect --format='{{json .State.Health}}' play-store-api-container
+
+# Stop and remove container
+docker stop play-store-api-container
+docker rm play-store-api-container
+
+
+2. KUBERNETES COMMANDS
+------------------------------------------------------------
+# Apply Deployment & Service manifests
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+
+# Check Deployment status
+kubectl get deployments
+kubectl get pods -l app=play-store-api -o wide
+
+# Check Services and NodePort
+kubectl get services play-store-api-service
+
+# Scale Deployment
+kubectl scale deployment/play-store-api --replicas=5
+
+# Rollout status
+kubectl rollout status deployment/play-store-api
+
+# Update container image in deployment
+kubectl set image deployment/play-store-api play-store-api=play-store-api:model-v2
+
+# Rollback deployment
+kubectl rollout undo deployment/play-store-api
+
+# Port forward for local testing
+kubectl port-forward svc/play-store-api-service 8000:8000

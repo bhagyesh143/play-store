@@ -1,0 +1,5 @@
+category,metric,value,status,details
+Data Drift,Features with drift,3.0,DRIFT,"Size, Installs, Category"
+Prediction Drift,Prediction distribution,0.03912800447177195,OK,KS statistic
+Prediction Drift,Probability distribution,0.10564561207378431,DRIFT,KS statistic
+Concept Drift,Degraded performance metrics,2.0,DRIFT,"recall, roc_auc"

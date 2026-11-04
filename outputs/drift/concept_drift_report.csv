@@ -1,0 +1,6 @@
+metric,baseline,evolved,change,status
+accuracy,0.6378,0.6199,-0.0179,OK
+precision,0.3593,0.4861,0.1268,OK
+recall,0.8177,0.6134,-0.2043,DRIFT
+f1,0.4992,0.5424,0.0432,OK
+roc_auc,0.763,0.6561,-0.1069,DRIFT

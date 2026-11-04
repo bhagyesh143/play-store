@@ -1,0 +1,8 @@
+{
+    "model_name": "Google_Play_Store_Production_Model",
+    "new_version": "4",
+    "stage": "None",
+    "champion_status": "candidate_v2",
+    "decision": "Version 4 promoted to Production.",
+    "run_id": "f44b87b4adb94a4ab5154663f8bb0816"
+}

@@ -1,2 +1,2 @@
-X_train_rows,X_train_columns,X_test_rows,X_test_columns,y_train_rows,y_test_rows,nan_values,preprocessor_available,validation_status
-7114,3667,1779,3667,7114,1779,False,True,PASSED
+validation_status,X_train_shape,X_test_shape,y_train_shape,y_test_shape,train_nans,test_nans,features_count
+PASSED,"[7153, 153]","[1789, 153]",[7153],[1789],0,0,153

@@ -1,0 +1,19 @@
+name: Lab 13 - Runner Diagnostic Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostic-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Environment
+        run: |
+          python3 --version
+          git --version
+          docker --version || echo "Docker not available"
+          kubectl version --client || echo "kubectl not available"

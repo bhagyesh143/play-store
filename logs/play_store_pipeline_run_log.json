@@ -1,0 +1,60 @@
+{
+    "pipeline": "Google Play Store Rating MLOps",
+    "stages": [
+        {
+            "stage": "Data Loading & Lineage",
+            "script": "src/mlops_pipeline/01_load_data.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Raw Data Validation",
+            "script": "src/mlops_pipeline/02_validate_data.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Preprocessing & Featurization",
+            "script": "src/mlops_pipeline/03_preprocessing.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Processed Output Validation",
+            "script": "src/mlops_pipeline/04_validate_outputs.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Training + MLflow Tracking + Registry",
+            "script": "src/mlops_pipeline/05_train_registry.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Model Evaluation",
+            "script": "src/mlops_pipeline/06_model_evaluation.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Model Quality Gate",
+            "script": "src/mlops_pipeline/07_quality_gate.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Automated Model Lifecycle",
+            "script": "src/mlops_pipeline/08_automate_lifecycle.py",
+            "status": "PASSED",
+            "exit_code": 0
+        },
+        {
+            "stage": "Production Inference Demo",
+            "script": "src/mlops_pipeline/09_inference.py",
+            "status": "PASSED",
+            "exit_code": 0
+        }
+    ],
+    "overall_status": "PASSED"
+}

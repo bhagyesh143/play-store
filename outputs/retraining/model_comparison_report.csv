@@ -1,0 +1,6 @@
+metric,production_v1,candidate_v2,improvement,improved
+accuracy,0.6378,0.6456,0.0078,True
+precision,0.3593,0.3668,0.0075,True
+recall,0.8177,0.8329,0.0152,True
+f1_score,0.4992,0.5093,0.0101,True
+roc_auc,0.763,0.7786,0.0156,True

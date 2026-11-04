@@ -1,0 +1,14 @@
+{
+    "total_requests": 28,
+    "successful_requests": 28,
+    "failed_requests": 0,
+    "success_rate_percent": 100.0,
+    "latency_ms": {
+        "mean": 44.99,
+        "median": 30.33,
+        "p95": 106.17,
+        "min": 17.53,
+        "max": 144.07
+    },
+    "status": "HEALTHY"
+}

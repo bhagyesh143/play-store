@@ -14,7 +14,11 @@ from fastapi.exceptions import RequestValidationError
 
 from api.schemas import (
     AppInput,
-    PredictionResponse
+    PredictionResponse,
+    HealthResponse,
+    ModelInfoResponse,
+    BatchAppInput,
+    BatchPredictionResponse
 )
 from api.preprocessing import transform_input_to_features
 from api.model_loader import model_service
@@ -319,3 +323,113 @@ async def predict_rating(app_input: AppInput, request: Request):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Prediction error: {str(e)}"
         )
+
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+async def health_check():
+    """
+    Health check endpoint returning model readiness status and API version.
+    """
+    return HealthResponse(
+        status="healthy" if model_service.model is not None else "degraded",
+        model_loaded=model_service.model is not None,
+        version="1.0.0",
+        timestamp=datetime.utcnow().isoformat() + "Z"
+    )
+
+
+@app.get("/metadata", response_model=ModelInfoResponse, tags=["Metadata"])
+async def get_model_metadata():
+    """
+    Metadata endpoint returning model architecture, features, and baseline metrics.
+    """
+    info = model_service.get_info()
+    return ModelInfoResponse(**info)
+
+
+@app.post("/predict/batch", response_model=BatchPredictionResponse, tags=["Inference"])
+async def predict_batch(batch_input: BatchAppInput, request: Request):
+    """
+    High-throughput batch inference endpoint for predicting multiple applications.
+    """
+    start_batch_time = time.perf_counter()
+    batch_request_id = str(uuid.uuid4())
+    client_ip = request.client.host if request.client else "unknown"
+    predictions = []
+
+    for app_item in batch_input.applications:
+        single_start = time.perf_counter()
+        req_id = str(uuid.uuid4())
+        item_dict = app_item.model_dump(by_alias=True)
+        try:
+            df_features = transform_input_to_features(item_dict)
+            pred_rating = model_service.predict_dataframe(df_features)
+            latency_ms = (time.perf_counter() - single_start) * 1000.0
+
+            inference_logger.log_prediction(
+                request_id=req_id,
+                input_features=item_dict,
+                predicted_rating=pred_rating,
+                prediction_latency_ms=latency_ms,
+                model_name=model_service.model_name,
+                model_version=model_service.model_version,
+                status="SUCCESS",
+                client_ip=client_ip
+            )
+
+            predictions.append(
+                PredictionResponse(
+                    request_id=req_id,
+                    app_name=str(item_dict.get("App", "Unknown App")),
+                    predicted_rating=round(pred_rating, 2),
+                    prediction_latency_ms=round(latency_ms, 2),
+                    model_name=model_service.model_name,
+                    model_version=model_service.model_version,
+                    timestamp=datetime.utcnow().isoformat() + "Z",
+                    status="SUCCESS"
+                )
+            )
+        except Exception as e:
+            latency_ms = (time.perf_counter() - single_start) * 1000.0
+            predictions.append(
+                PredictionResponse(
+                    request_id=req_id,
+                    app_name=str(item_dict.get("App", "Unknown App")),
+                    predicted_rating=-1.0,
+                    prediction_latency_ms=round(latency_ms, 2),
+                    model_name=model_service.model_name,
+                    model_version=model_service.model_version,
+                    timestamp=datetime.utcnow().isoformat() + "Z",
+                    status=f"FAILED: {str(e)}"
+                )
+            )
+
+    total_batch_latency = (time.perf_counter() - start_batch_time) * 1000.0
+    return BatchPredictionResponse(
+        request_id=batch_request_id,
+        total_applications=len(predictions),
+        predictions=predictions,
+        total_latency_ms=round(total_batch_latency, 2),
+        status="SUCCESS"
+    )
+
+
+@app.get("/drift/status", tags=["Monitoring"])
+async def drift_status():
+    """
+    Returns latest drift monitoring status if reports exist.
+    """
+    import os
+    import pandas as pd
+    drift_report_path = "outputs/drift/drift_analysis_report.csv"
+    if os.path.exists(drift_report_path):
+        df = pd.read_csv(drift_report_path)
+        has_drift = (df["status"] == "DRIFT").any()
+        return {
+            "status": "DRIFT_DETECTED" if has_drift else "STABLE",
+            "summary": df.to_dict(orient="records")
+        }
+    return {
+        "status": "INITIALIZED",
+        "message": "Drift report pending monitoring cycle run."
+    }

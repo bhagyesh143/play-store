@@ -1,0 +1,36 @@
+{
+    "dataset_name": "Google Play Store Apps",
+    "target_column": "churn",
+    "train_shape_raw": [
+        7153,
+        8
+    ],
+    "test_shape_raw": [
+        1789,
+        8
+    ],
+    "train_shape_transformed": [
+        7153,
+        153
+    ],
+    "test_shape_transformed": [
+        1789,
+        153
+    ],
+    "numerical_features": [
+        "Reviews",
+        "Size",
+        "Installs",
+        "Price"
+    ],
+    "categorical_features": [
+        "Category",
+        "Type",
+        "Content Rating",
+        "Genres"
+    ],
+    "split_test_size": 0.2,
+    "split_random_state": 42,
+    "raw_train_path": "data/processed/X_train_raw.csv",
+    "raw_test_path": "data/processed/X_test_raw.csv"
+}

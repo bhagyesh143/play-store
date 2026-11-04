@@ -1,0 +1,24 @@
+{
+    "pipeline": "Google Play Store Rating MLOps",
+    "failure_injection": true,
+    "total_tests": 5,
+    "failures_detected": 3,
+    "status": "FAILURES_DETECTED",
+    "failures": [
+        {
+            "failure_type": "Missing Values",
+            "status": "DETECTED",
+            "message": "1488 missing values detected across dataset."
+        },
+        {
+            "failure_type": "Invalid Target Values",
+            "status": "DETECTED",
+            "message": "Invalid rating values found: [19.0]"
+        },
+        {
+            "failure_type": "Duplicate Records",
+            "status": "DETECTED",
+            "message": "483 duplicate rows detected."
+        }
+    ]
+}

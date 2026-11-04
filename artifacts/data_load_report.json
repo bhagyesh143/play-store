@@ -1,0 +1,24 @@
+{
+    "stage": "ML Pipeline - Data Loading",
+    "status": "already_ingested",
+    "new_data_ingested": false,
+    "source_file": "data/raw/googleplaystore.csv",
+    "rows": 10891,
+    "columns": 13,
+    "column_names": [
+        "App",
+        "Category",
+        "Rating",
+        "Reviews",
+        "Size",
+        "Installs",
+        "Type",
+        "Price",
+        "Content Rating",
+        "Genres",
+        "Last Updated",
+        "Current Ver",
+        "Android Ver"
+    ],
+    "timestamp": "2026-11-04T09:38:52.647199+00:00"
+}

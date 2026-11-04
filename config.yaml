@@ -1,0 +1,40 @@
+data:
+  raw_path: "data/raw/googleplaystore.csv"
+  new_raw_path: "data/raw/new_googleplaystore.csv"
+  archive_dir: "data/raw/archive"
+  lineage_path: "data/raw/archive/dataset_lineage.json"
+  processed_dir: "data/processed"
+  target_column: "churn"
+  id_column: "App"
+
+split:
+  test_size: 0.20
+  random_state: 42
+
+paths:
+  preprocessor: "models/preprocessor.pkl"
+  model: "models/random_forest_model.pkl"
+  evaluation_report: "reports/model_evaluation.json"
+  quality_gate_report: "reports/quality_gate_report.json"
+  lifecycle_report: "reports/lifecycle_report.json"
+  inference_output: "reports/inference_results.csv"
+  confusion_matrix: "artifacts/confusion_matrix.png"
+  roc_curve: "artifacts/roc_curve.png"
+
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "Google_Play_Store_Prediction"
+
+model:
+  n_estimators: 150
+  max_depth: 12
+  random_state: 42
+  class_weight: "balanced"
+
+registry:
+  model_name: "Google_Play_Store_Production_Model"
+  decision_metric: "recall"
+
+quality_gate:
+  metric: "recall"
+  minimum_value: 0.70

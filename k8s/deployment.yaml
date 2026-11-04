@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: play-store-api
+  labels:
+    app: play-store-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: play-store-api
+  template:
+    metadata:
+      labels:
+        app: play-store-api
+    spec:
+      containers:
+        - name: play-store-api
+          image: play-store-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

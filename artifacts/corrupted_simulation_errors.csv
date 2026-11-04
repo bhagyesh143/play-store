@@ -1,0 +1,4 @@
+test,expected,actual,result
+Missing Values,0,1488,FAIL
+Invalid Target Values,1.0 <= Rating <= 5.0,[19.0],FAIL
+Duplicate Records,0,483,FAIL

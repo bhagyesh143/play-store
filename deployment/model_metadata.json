@@ -1,0 +1,10 @@
+{
+    "model_name": "Google_Play_Store_Production_Model",
+    "model_version": "5",
+    "model_stage": "Production",
+    "run_id": "669de96e2903412d99e98a2cc1b341cd",
+    "source_model_path": "models/random_forest_model.pkl",
+    "source_preprocessor_path": "models/preprocessor.pkl",
+    "tracking_uri": "sqlite:///mlflow.db",
+    "expected_features": 153
+}

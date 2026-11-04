@@ -1,0 +1,4 @@
+# Quick Kubernetes Verification
+kubectl get all -l app=play-store-api
+kubectl describe deployment play-store-api
+kubectl logs -l app=play-store-api --tail=50

@@ -1,0 +1,2 @@
+baseline_train_rows,new_drift_rows,total_updated_rows,churn_rate,output_path
+7153,1789,8942,0.2498,data/processed/updated_training_data.csv

@@ -1,0 +1,48 @@
+name: Lab 13 - End-to-End MLOps Continuous Monitoring
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 * * * *"
+
+jobs:
+  mlops-monitoring:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Continuous Drift Monitoring & Trigger
+        run: |
+          python src/mlops_pipeline/12_monitor_trigger.py
+
+      - name: Show Monitoring Decision Report
+        if: always()
+        run: |
+          if [ -f "outputs/monitoring/monitor_trigger_report.json" ]; then
+            cat outputs/monitoring/monitor_trigger_report.json
+          else
+            echo "Monitoring report was not generated."
+          fi
+
+      - name: Upload Monitoring Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab13-monitoring-reports
+          path: |
+            outputs/monitoring/monitor_trigger_report.json
+            outputs/drift/drift_analysis_report.csv
+            artifacts/data_load_report.json
+          if-no-files-found: warn
